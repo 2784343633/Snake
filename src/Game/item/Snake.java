@@ -18,6 +18,25 @@ public class Snake {
     private Point tail;
     private LinkedList<Point> bodyPoints = new LinkedList<>();
 
+    private int score;
+    private int len;
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public int getLen() {
+        return len;
+    }
+
+    public void setLen(int len) {
+        this.len = len;
+    }
+
     public boolean isHasMoved() {
         return hasMoved;
     }
@@ -75,6 +94,7 @@ public class Snake {
         this.hasMoved = false;
         this.towards = toWard;
         this.head = new Point(x, y);
+        this.len = initLen;
 
         for (int i = 0; i < initLen - 2; i++) {
             Point point;
@@ -137,6 +157,8 @@ public class Snake {
                 throw new IllegalArgumentException("Unexpected value: " + this.towards);
         }
         this.bodyPoints.addFirst(new Point(x, y));
+        this.len++;
+        this.score += 50;
     }
 
     public void move() {
