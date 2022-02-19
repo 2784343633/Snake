@@ -24,4 +24,6 @@ public class Img {
             "\\body.png");
     public final static Image food = Toolkit.getDefaultToolkit().getImage("C:\\Users\\admin\\IdeaProjects\\Snake\\source" +
             "\\egg.png");
+    public final static Image wall = Toolkit.getDefaultToolkit().getImage("C:\\Users\\admin\\IdeaProjects\\Snake\\source" +
+            "\\wall.png");
 }

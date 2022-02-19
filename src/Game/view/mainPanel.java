@@ -4,6 +4,7 @@ import javax.swing.*;
 
 import Game.item.Food;
 import Game.item.Snake;
+import Game.item.Wall;
 import Game.tool.Point;
 import Game.imgSrc.Img;
 
@@ -23,6 +24,7 @@ public class mainPanel extends JPanel implements ActionListener, KeyListener {
     public final static int initDelay = 300;
     public Snake snake;
     public Food food;
+    public Wall wall;
     private int state;
     private int delay;
 
@@ -33,7 +35,8 @@ public class mainPanel extends JPanel implements ActionListener, KeyListener {
     public void initPanel() {
         this.snake = new Snake();
         this.snake.init(400, 224, Snake.RIGHT);
-        this.food = new Food(this.snake);
+        this.wall = new Wall(Wall.L1);
+        this.food = new Food(this.snake, this.wall);
         this.setBackground(new Color(255, 251, 153));
         this.setDoubleBuffered(true);
         this.setBounds(30, 30, Width, Height);
@@ -45,10 +48,14 @@ public class mainPanel extends JPanel implements ActionListener, KeyListener {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         if (this.state == Start) {
+            super.paintComponent(g);
             g.setColor(Color.red);
             g.setFont(new Font("微软雅黑", Font.ITALIC, 32));
             g.drawString("Press 'Enter' to start", 200, 180);
         } else if (this.state == Run) {
+            for (Point point : wall.getWallPoints()) {
+                g.drawImage(Img.wall, point.getX(), point.getY(), Img.SIZE, Img.SIZE, this);
+            }
             switch (snake.getTowards()) {
                 case Snake.UP: {
                     g.drawImage(Img.head_u, Math.floorMod(snake.getHead().getX(), Width), Math.floorMod(snake.getHead().getY(), Height), Img.SIZE, Img.SIZE, this);
@@ -110,8 +117,8 @@ public class mainPanel extends JPanel implements ActionListener, KeyListener {
         if (this.snake.getHead().equals(this.food.getLocation())) {
             this.snake.lengthen();
             this.delay -= 10;
-            this.food = new Food(this.snake);
-        } else if (this.snake.getTail().equals(this.snake.getHead()) || this.snake.getBodyPoints().contains(this.snake.getHead())) {
+            this.food = new Food(this.snake, this.wall);
+        } else if (this.snake.getTail().equals(this.snake.getHead()) || this.snake.getBodyPoints().contains(this.snake.getHead()) || this.wall.getWallPoints().contains(this.snake.getHead())) {
             this.snake = new Snake();
             this.snake.init(400, 224, Snake.RIGHT);
             this.state = Over;
